@@ -28,7 +28,7 @@ class Bird(pygame.sprite.Sprite):
     # make the bird jump
     def jump(self):
         self.game_status.set_game_started()
-        self.velocity = -10
+        self.velocity = -9
 
     # apply gravity to the bird
     def apply_gravity(self):

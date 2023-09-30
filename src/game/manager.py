@@ -7,7 +7,7 @@ from game.entities.bird import Bird
 from game.entities.pipe import Pipe
 from game.entities.score import Score
 
-class GameState:
+class GameManager:
     def __init__(self, config, game_status):
         self.config = config
         self.screen = self.config.screen
