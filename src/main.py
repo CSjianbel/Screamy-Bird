@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 
-from game.state import GameState
+from game.manager import GameManager
 from game.controller import GameController
 
 from game.utils.sprites import Sprites
@@ -25,8 +25,11 @@ class FlappyBird:
     def start(self):
         game_status = GameStatus()
         game_config = GameConfig(self.screen, self.window, self.sprites, self.fps, self.clock)
-        game_state = GameState(game_config, game_status)
+        game_state = GameManager(game_config, game_status)
         game_controller = GameController(game_state, game_status)
+
+        # create a child process for voice recognition
+        game_controller.start_voice_recognition()
 
         while True:
             self.clock.tick(self.fps)
