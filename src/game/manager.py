@@ -6,6 +6,7 @@ from game.entities.background import Background
 from game.entities.bird import Bird
 from game.entities.pipe import Pipe
 from game.entities.score import Score
+from game.entities.leaderboard import LeaderBoard
 
 class GameManager:
     def __init__(self, config, game_status):
@@ -22,6 +23,7 @@ class GameManager:
         self.ground = Ground(self.sprites.ground, 300, 768, self.game_status)
         self.background = Background(self.sprites.background)
         self.score = Score(self.bird_group, self.pipe_group)
+        self.leaderboard = LeaderBoard(self.config, self.game_status, self.score)
         self.pass_pipe = False
         self.ground_group.add(self.ground)
         self.bird_group.add(self.bird)
@@ -42,6 +44,10 @@ class GameManager:
 
         self.ground_group.draw(self.screen)
         self.ground_group.update()
+
+        if self.game_status.is_game_over:
+            self.leaderboard.draw(self.screen)
+            self.leaderboard.update()
 
     def generate_pipes(self):
         time_now = pygame.time.get_ticks()

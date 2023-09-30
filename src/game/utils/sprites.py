@@ -10,3 +10,4 @@ class Sprites:
         self.background = pygame.image.load("../assets/sprites/background.png")
         self.pipe = pygame.image.load("../assets/sprites/pipe.png")
         self.ground = pygame.image.load("../assets/sprites/ground.png")
+        self.save_button = pygame.image.load("../assets/sprites/restart.png")

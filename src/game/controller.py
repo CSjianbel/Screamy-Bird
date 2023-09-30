@@ -20,7 +20,6 @@ class GameController:
                                          frames_per_buffer = 1024)
         
     def update(self):
-        #self.jump_voice_control()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.game_manager.is_game_over = True
@@ -57,12 +56,12 @@ class GameController:
         
     def jump_voice_control(self):
         while not self.game_status.is_game_over:
-            print("hello")
+            # print("hello")
             # Capture audio for voice control
             audio_data = np.frombuffer(self.stream.read(1024), dtype=np.float32)
             loudness = np.abs(audio_data).mean()
 
-            print(loudness)
+            # print(loudness)
 
             if not self.game_status.is_game_over:
                 if loudness > self.scream_threshold:
@@ -75,5 +74,6 @@ class GameController:
                 self.game_manager.pipe_group.empty()
                 self.game_manager.bird.reset()
                 self.game_manager.score.reset()
+                self.game_manager.leaderboard.reset_saved_data()
                 self.stop_voice_recognition()
                 self.start_voice_recognition()
