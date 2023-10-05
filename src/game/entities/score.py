@@ -1,4 +1,9 @@
+import os
+
 import pygame
+
+ASSETS_DIR = os.path.join('..', 'assets')
+FONTS_DIR = os.path.join(ASSETS_DIR, 'fonts')
 
 class Score:
     def __init__(self, bird_group, pipe_group):
@@ -6,7 +11,7 @@ class Score:
         self.bird_group = bird_group
         self.pipe_group = pipe_group
         self.pass_pipe = False
-        self.font = pygame.font.Font("../assets/fonts/flappy-font.ttf", 60)
+        self.font = pygame.font.Font(os.path.join(FONTS_DIR, 'flappy-font.ttf'), 60)
         self.text = self.font.render(str(self.score), True, (255, 255, 255))
         self.text_rect = self.text.get_rect()
         self.text_rect.center = (100, 20)

@@ -1,5 +1,4 @@
 import pygame
-import random
 import pyaudio
 import numpy as np
 import threading
@@ -22,7 +21,6 @@ class GameController:
                                          frames_per_buffer = 1024)
         
     def update(self):
-        #self.jump_voice_control()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.game_manager.is_game_over = True

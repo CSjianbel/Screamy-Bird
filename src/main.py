@@ -35,7 +35,6 @@ class FlappyBird:
             self.clock.tick(self.fps)
             game_controller.update()
             game_state.update()
-            
             pygame.display.update()
 
 
