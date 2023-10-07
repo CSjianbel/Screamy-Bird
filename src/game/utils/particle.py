@@ -5,22 +5,22 @@ class RainbowParticles:
     def __init__(self):
         self.particles = []
         self.size = 4
+        self.scroll_speed = 4
         self.x = 90
 
     def draw(self, screen, catY):
         self.generate_particles(catY)
         self.delete_particles()
         for particle in self.particles:
-            particle[0].x -= 4
+            particle[0].x -= self.scroll_speed
             pygame.draw.rect(screen, particle[1], particle[0])
 
     def generate_particles(self, catY):
-        self.add_particles(6, pygame.Color('Red'), catY)
-        self.add_particles(10, pygame.Color('Orange'), catY)
-        self.add_particles(14, pygame.Color('Yellow'), catY)
-        self.add_particles(18, pygame.Color('Green'), catY)
-        self.add_particles(22, pygame.Color('Blue'), catY)
-        self.add_particles(26, pygame.Color('Purple'), catY)
+        colors = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Purple']
+        init_offset = 6
+        for color in colors: 
+            self.add_particles(init_offset + self.size, pygame.Color(color), catY)
+            init_offset +=  self.size
 
     def add_particles(self, offset, color, catY):
         pos_y = catY + offset
