@@ -65,3 +65,6 @@ class Bird(pygame.sprite.Sprite):
         self.rect.center = [self.init_x, self.init_y]
         self.velocity = 0
         self.game_status.set_game_idle()
+
+    def getPosY(self):
+        return self.rect.y

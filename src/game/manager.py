@@ -7,6 +7,8 @@ from game.entities.bird import Bird
 from game.entities.pipe import Pipe
 from game.entities.score import Score
 
+from game.utils.particle import RainbowParticles
+
 class GameManager:
     def __init__(self, config, game_status):
         self.config = config
@@ -25,11 +27,15 @@ class GameManager:
         self.pass_pipe = False
         self.ground_group.add(self.ground)
         self.bird_group.add(self.bird)
+        self.rainbow_particles = RainbowParticles()
 
     def update(self):
         self.background.draw(self.screen)
+
+        self.rainbow_particles.draw(self.screen, self.bird.getPosY())
+
         self.pipe_group.draw(self.screen)
-   
+
         self.bird_group.draw(self.screen)
         self.bird_group.update()
         
