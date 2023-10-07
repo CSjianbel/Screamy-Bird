@@ -11,7 +11,7 @@ class RainbowParticles:
         self.generate_particles(catY)
         self.delete_particles()
         for particle in self.particles:
-            particle[0].x -= 1
+            particle[0].x -= 4
             pygame.draw.rect(screen, particle[1], particle[0])
 
     def generate_particles(self, catY):
