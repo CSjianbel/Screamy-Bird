@@ -10,6 +10,8 @@ class LeaderBoard:
         self.config = config
         self.leaderboard_process = None
         self.leaderboard_data = []
+        self.leaderboard_bg = config.sprites.leaderboard
+        self.leaderboard_table = config.sprites.leaderboard_table
         self.has_saved_data = False
         self.textinput = pygame_textinput.TextInputVisualizer()
         self.save_button = Button(280, 200, self.config.sprites.save_button)
@@ -23,8 +25,11 @@ class LeaderBoard:
             self.create_data()
  
     def draw(self, screen):
+        screen.blit(self.leaderboard_bg, (100, 150))
+        screen.blit(self.leaderboard_table, (130, 230))
         screen.blit(self.textinput.surface, (280, 100))
-        self.save_button.draw(screen)
+        #self.save_button.draw(screen)
+        self.leaderboard_list(screen)
 
     def create_data(self):
         print("data created")
@@ -49,6 +54,26 @@ class LeaderBoard:
 
     def reset_saved_data(self):
         self.has_saved_data = False
+
+    def leaderboard_list(self, screen):
+        self.read_data()
+        self.leaderboard_data = sorted(self.leaderboard_data, key = lambda entry: entry['score'], reverse = True)
+        font = pygame.font.Font("../assets/fonts/flappy-font.ttf", 18)
+
+        for i in range(10):
+            if i < len(self.leaderboard_data):
+                entry = self.leaderboard_data[i]
+                rank = font.render(f"{i + 1}", True, (205, 173, 88))
+                player_name = font.render(f"{entry['name']}", True, (205, 173, 88))
+                score = font.render(f"{entry['score']}", True, (205, 173, 88))
+            else:
+                rank = font.render(f"{i + 1}", True, (205, 173, 88))
+                player_name = font.render("", True, (205, 173, 88))
+                score = font.render("", True, (205, 173, 88))
+            
+            screen.blit(rank, (146, 275 + i * 35.5))
+            screen.blit(player_name, (180, 275 + i * 35.5))
+            screen.blit(score, (420, 275 + i * 35.5))
 
 #     def get_rank(self, score):
 #         # Get the rank of a player based on their score
