@@ -27,7 +27,7 @@ class GameManager:
         self.background = Background(self.sprites.background)
         self.score = Score(self.bird_group, self.pipe_group)
         self.leaderboard = LeaderBoard(self.config, self.game_status, self.score)
-        self.game_end = GameEnd(self.config, self.game_status, self.score, self.leaderboard)
+        self.game_end = None
         self.pass_pipe = False
         self.ground_group.add(self.ground)
         self.bird_group.add(self.bird)
@@ -57,8 +57,8 @@ class GameManager:
 
         if self.game_status.is_game_over:
             self.game_end.draw(self.screen)
-            #self.leaderboard.draw(self.screen)
-            #self.leaderboard.update()
+            # self.leaderboard.draw(self.screen)
+            # self.leaderboard.update()
 
     def generate_pipes(self):
         time_now = pygame.time.get_ticks()
@@ -77,3 +77,14 @@ class GameManager:
             (self.bird.rect.top <= 0):
             self.game_status.set_game_over()
        
+
+    """
+    this function should not exist, but I don't have any idea how to access
+    the game controller object from this class to pass it to the game_end class,
+    so I just put it here :)
+
+    I am aware that this is a bad practice, but I don't have any idea how to do it properly
+    maybe u could think of a better idea to structure this project :)
+    """
+    def create_end_game_screen(self, controller):
+        self.game_end = GameEnd(self.config, self.game_status, self.score, self.leaderboard, controller)

@@ -27,7 +27,8 @@ class FlappyBird:
         game_config = GameConfig(self.screen, self.window, self.sprites, self.fps, self.clock)
         game_manager = GameManager(game_config, game_status)
         game_controller = GameController(game_manager, game_status)
-
+        game_manager.create_end_game_screen(game_controller)
+        
         # create a child process for voice recognition
         game_controller.start_voice_recognition()
 
