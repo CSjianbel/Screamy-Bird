@@ -1,5 +1,4 @@
 import pygame
-import random
 import pyaudio
 import numpy as np
 import threading
@@ -13,6 +12,8 @@ class GameController:
         self.py_audio = pyaudio.PyAudio()
         self.scream_threshold = 0.2
         self.voice_process = None
+        self.terminate_voice_process = False
+        self.exit = False
         self.stream = self.py_audio.open(format = pyaudio.paFloat32,
                                          channels = 1,
                                          rate = 44100,
@@ -24,11 +25,11 @@ class GameController:
             if event.type == pygame.QUIT:
                 self.game_manager.is_game_over = True
                 self.game_status.set_game_over()
-                pygame.quit()
                 self.stop_voice_recognition()
                 self.stream.stop_stream()
                 self.stream.close()
                 self.py_audio.terminate()
+                self.exit = True
 
             if not self.game_status.is_game_over:
                 self.jump_button_control(event)
@@ -52,20 +53,22 @@ class GameController:
 
     def stop_voice_recognition(self):
         if self.voice_process and self.voice_process.is_alive():
-            self.voice_process.terminate()
+            self.terminate_voice_process = True
         
     def jump_voice_control(self):
         while not self.game_status.is_game_over:
-            # print("hello")
             # Capture audio for voice control
             audio_data = np.frombuffer(self.stream.read(1024), dtype=np.float32)
             loudness = np.abs(audio_data).mean()
 
-            # print(loudness)
+            print(f'Loudness: {loudness}')
 
             if not self.game_status.is_game_over:
                 if loudness > self.scream_threshold:
                     self.bird.jump()
+            
+            if self.terminate_voice_process:
+                break
 
     def restart_game(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -74,6 +77,5 @@ class GameController:
                 self.game_manager.pipe_group.empty()
                 self.game_manager.bird.reset()
                 self.game_manager.score.reset()
-                self.game_manager.leaderboard.reset_saved_data()
                 self.stop_voice_recognition()
                 self.start_voice_recognition()

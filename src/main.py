@@ -31,17 +31,11 @@ class FlappyBird:
         # create a child process for voice recognition
         game_controller.start_voice_recognition()
 
-        while True:
+        while not game_controller.exit:
             self.clock.tick(self.fps)
             game_controller.update()
             game_manager.update()
-            
             pygame.display.update()
-
-        self.exit()
-
-    def exit(self):
-        pygame.quit()
 
 
 def main():
