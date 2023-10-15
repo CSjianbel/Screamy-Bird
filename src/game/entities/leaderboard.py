@@ -16,18 +16,20 @@ class LeaderBoard:
         self.textinput = pygame_textinput.TextInputVisualizer()
         self.save_button = Button(280, 200, self.config.sprites.save_button)
 
-    def update(self):
-        events = pygame.event.get()
-        self.textinput.update(events)
+        # events = pygame.event.get()
+        # self.textinput.update(events)
 
-        if self.save_button.is_clicked() and not self.has_saved_data:
-            self.has_saved_data = True
-            self.create_data()
+        # if self.save_button.is_clicked() and not self.has_saved_data:
+        #     self.has_saved_data = True
+        #     self.create_data()
+
+    def update(self):
+        pass
  
     def draw(self, screen):
         screen.blit(self.leaderboard_bg, (100, 150))
         screen.blit(self.leaderboard_table, (130, 230))
-        screen.blit(self.textinput.surface, (280, 100))
+        #screen.blit(self.textinput.surface, (280, 100))
         #self.save_button.draw(screen)
         self.leaderboard_list(screen)
 
@@ -75,8 +77,15 @@ class LeaderBoard:
             screen.blit(player_name, (180, 275 + i * 35.5))
             screen.blit(score, (420, 275 + i * 35.5))
 
-#     def get_rank(self, score):
-#         # Get the rank of a player based on their score
-#         self.leaderboard.sort(reverse=True, key=lambda entry: entry['score'])
-#         rank = next((i + 1 for i, entry in enumerate(self.leaderboard) if entry['score'] <= score), None)
-#         return rank
+    def get_rank(self, score):
+        self.read_data()
+        self.leaderboard_data = sorted(self.leaderboard_data, key = lambda entry: entry['score'], reverse = True)
+        rank = 1
+
+        for entry in self.leaderboard_data:
+            if score <= entry['score']:
+                rank += 1
+            else:
+                break
+        
+        return rank
