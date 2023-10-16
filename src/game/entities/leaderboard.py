@@ -41,29 +41,30 @@ class LeaderBoard:
             self.game_manager.show_result = True
 
 
-    def create_data(self):
+    def create_data(self, username, score):
         print("data created")
         new_data = {
-            "name": self.textinput.value,
-            "score": self.score.score
+            "name": username,
+            "score": score
         }
 
-        self.read_data()
-        self.save_data(new_data)
+        return new_data
+    
+    def read_data(self):
+        with open("data/leaderboard.json", "r") as infile:
+            self.leaderboard_data = json.load(infile)
 
-    def save_data(self, new_data):
+    def save_data(self, username, score):
+        new_data = self.create_data(username, score)
+        self.read_data()
+
         self.leaderboard_data.append(new_data)
         self.leaderboard_data = sorted(self.leaderboard_data, key=lambda entry: entry['score'], reverse=True)
 
         with open("data/leaderboard.json", "w") as outfile:
             json.dump(self.leaderboard_data, outfile, indent=4, separators=(',', ': '))
-
-    def read_data(self):
-        with open("data/leaderboard.json", "r") as infile:
-            self.leaderboard_data = json.load(infile)
-
-    def reset_saved_data(self):
-        self.has_saved_data = False
+        
+        print('score saved')
 
     def leaderboard_list(self, screen):
         self.read_data()
@@ -91,7 +92,7 @@ class LeaderBoard:
         rank = 1
 
         for entry in self.leaderboard_data:
-            if score <= entry['score']:
+            if score < entry['score']:
                 rank += 1
             else:
                 break

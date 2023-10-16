@@ -24,3 +24,6 @@ class Sprites:
         self.home_btn = pygame.image.load(os.path.join(SPRITES_DIR, 'home.png'))
         self.show_board_btn = pygame.image.load(os.path.join(SPRITES_DIR, 'show_board.png'))
         self.back_btn = pygame.image.load(os.path.join(SPRITES_DIR, 'back.png'))
+        self.submit_btn = pygame.image.load(os.path.join(SPRITES_DIR, 'submit.png'))
+        self.name_input = pygame.image.load(os.path.join(SPRITES_DIR, 'name_input.png'))
+        self.name_input_placeholder = pygame.image.load(os.path.join(SPRITES_DIR, 'name_input_placeholder.png'))

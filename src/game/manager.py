@@ -66,6 +66,7 @@ class GameManager:
         if self.game_status.is_game_over:
             if self.show_result:
                 self.game_end.draw(self.screen)
+                self.game_end.update()
             if self.show_leaderboard:
                 self.leaderboard.draw(self.screen)
                 self.leaderboard.update()
