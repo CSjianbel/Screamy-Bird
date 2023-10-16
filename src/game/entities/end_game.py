@@ -34,7 +34,7 @@ class GameEnd:
         screen.blit(self.result_bg, (100, 275))
 
         label_font = pygame.font.Font("../assets/fonts/flappy-font.ttf", 48)
-        input_font = pygame.font.Font("../assets/fonts/flappy-font.ttf", 18)
+        input_font = pygame.font.Font("../assets/fonts/chary.ttf", 26)
 
         if not self.leaderboard.has_saved_data:
             if len(self.username) > 0:
@@ -44,7 +44,7 @@ class GameEnd:
             
             self.submit_btn.draw(screen)
             username_input = input_font.render(f"{self.username}", True, (205, 173, 88))
-            screen.blit(username_input, (145, 419))
+            screen.blit(username_input, (144, 415))
         else:
             score_submitted_prompt = input_font.render("Score Submitted!", True, (205, 173, 88))
             screen.blit(score_submitted_prompt, (220, 419))

@@ -70,20 +70,21 @@ class LeaderBoard:
         self.read_data()
         self.leaderboard_data = sorted(self.leaderboard_data, key = lambda entry: entry['score'], reverse = True)
         font = pygame.font.Font("../assets/fonts/flappy-font.ttf", 18)
+        name_font = pygame.font.Font("../assets/fonts/chary.ttf", 24)
 
         for i in range(10):
             if i < len(self.leaderboard_data):
                 entry = self.leaderboard_data[i]
                 rank = font.render(f"{i + 1}", True, (205, 173, 88))
-                player_name = font.render(f"{entry['name']}", True, (205, 173, 88))
+                player_name = name_font.render(f"{entry['name']}", True, (205, 173, 88))
                 score = font.render(f"{entry['score']}", True, (205, 173, 88))
             else:
                 rank = font.render(f"{i + 1}", True, (205, 173, 88))
-                player_name = font.render("", True, (205, 173, 88))
+                player_name = name_font.render("", True, (205, 173, 88))
                 score = font.render("", True, (205, 173, 88))
             
             screen.blit(rank, (146, 275 + i * 35.5))
-            screen.blit(player_name, (180, 275 + i * 35.5))
+            screen.blit(player_name, (180, 272 + i * 35))
             screen.blit(score, (420, 275 + i * 35.5))
 
     def get_rank(self, score):
