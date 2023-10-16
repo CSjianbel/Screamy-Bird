@@ -44,7 +44,7 @@ class GameEnd:
             
             self.submit_btn.draw(screen)
             username_input = input_font.render(f"{self.username}", True, (205, 173, 88))
-            screen.blit(username_input, (145, 415))
+            screen.blit(username_input, (144, 415))
         else:
             score_submitted_prompt = input_font.render("Score Submitted!", True, (205, 173, 88))
             screen.blit(score_submitted_prompt, (220, 419))
