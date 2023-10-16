@@ -4,7 +4,8 @@ import pygame_textinput
 from ..utils.button import Button
 
 class LeaderBoard:
-    def __init__(self, config, game_status, score):
+    def __init__(self, config, game_status, score, game_manager):
+        self.game_manager = game_manager
         self.score = score
         self.game_status = game_status
         self.config = config
@@ -14,6 +15,7 @@ class LeaderBoard:
         self.leaderboard_table = config.sprites.leaderboard_table
         self.has_saved_data = False
         self.textinput = pygame_textinput.TextInputVisualizer()
+        self.back_btn = Button(100, 75, config.sprites.back_btn)
         self.save_button = Button(280, 200, self.config.sprites.save_button)
 
         # events = pygame.event.get()
@@ -27,11 +29,17 @@ class LeaderBoard:
         pass
  
     def draw(self, screen):
+        self.back_btn.draw(screen)
         screen.blit(self.leaderboard_bg, (100, 150))
         screen.blit(self.leaderboard_table, (130, 230))
         #screen.blit(self.textinput.surface, (280, 100))
         #self.save_button.draw(screen)
         self.leaderboard_list(screen)
+
+        if self.back_btn.is_clicked():
+            self.game_manager.show_leaderboard = False
+            self.game_manager.show_result = True
+
 
     def create_data(self):
         print("data created")

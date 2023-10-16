@@ -9,7 +9,9 @@ from game.entities.score import Score
 from game.entities.leaderboard import LeaderBoard
 from game.entities.end_game import GameEnd
 
+from game.controller import GameController
 from game.utils.particle import RainbowParticles
+
 
 class GameManager:
     def __init__(self, config, game_status):
@@ -26,12 +28,18 @@ class GameManager:
         self.ground = Ground(self.sprites.ground, 300, 768, self.game_status)
         self.background = Background(self.sprites.background)
         self.score = Score(self.bird_group, self.pipe_group)
-        self.leaderboard = LeaderBoard(self.config, self.game_status, self.score)
-        self.game_end = None
         self.pass_pipe = False
         self.ground_group.add(self.ground)
         self.bird_group.add(self.bird)
         self.rainbow_particles = RainbowParticles()
+        self.game_controller = GameController(self, self.game_status)
+
+        self.show_leaderboard = False
+        self.show_result = True
+        self.leaderboard = LeaderBoard(self.config, self.game_status, self.score, self)
+        self.game_end = GameEnd(self.config, self.game_status, self.score, self.leaderboard, self)
+
+        
 
     def update(self):
         self.background.draw(self.screen)
@@ -56,9 +64,12 @@ class GameManager:
         self.ground_group.update()
 
         if self.game_status.is_game_over:
-            self.game_end.draw(self.screen)
-            # self.leaderboard.draw(self.screen)
-            # self.leaderboard.update()
+            if self.show_result:
+                self.game_end.draw(self.screen)
+            if self.show_leaderboard:
+                self.leaderboard.draw(self.screen)
+                self.leaderboard.update()
+
 
     def generate_pipes(self):
         time_now = pygame.time.get_ticks()
@@ -76,15 +87,11 @@ class GameManager:
             pygame.sprite.groupcollide(self.bird_group, self.ground_group, False, False) or \
             (self.bird.rect.top <= 0):
             self.game_status.set_game_over()
+
+    def restart_game(self):
+        self.game_status.set_game_idle()
+        self.pipe_group.empty()
+        self.bird.reset()
+        self.score.reset()
+        self.game_controller.start_voice_recognition()
        
-
-    """
-    this function should not exist, but I don't have any idea how to access
-    the game controller object from this class to pass it to the game_end class,
-    so I just put it here :)
-
-    I am aware that this is a bad practice, but I don't have any idea how to do it properly
-    maybe u could think of a better idea to structure this project :)
-    """
-    def create_end_game_screen(self, controller):
-        self.game_end = GameEnd(self.config, self.game_status, self.score, self.leaderboard, controller)

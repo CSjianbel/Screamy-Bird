@@ -23,7 +23,6 @@ class GameController:
     def update(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.game_manager.is_game_over = True
                 self.game_status.set_game_over()
                 self.stop_voice_recognition()
                 self.stream.stop_stream()
@@ -69,10 +68,3 @@ class GameController:
             
             if self.terminate_voice_process:
                 break
-
-    def restart_game(self):
-        self.game_status.set_game_idle()
-        self.game_manager.pipe_group.empty()
-        self.game_manager.bird.reset()
-        self.game_manager.score.reset()
-        self.start_voice_recognition()

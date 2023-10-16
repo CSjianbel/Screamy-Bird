@@ -23,3 +23,4 @@ class Sprites:
         self.restart_btn = pygame.image.load(os.path.join(SPRITES_DIR, 'restart.png'))
         self.home_btn = pygame.image.load(os.path.join(SPRITES_DIR, 'home.png'))
         self.show_board_btn = pygame.image.load(os.path.join(SPRITES_DIR, 'show_board.png'))
+        self.back_btn = pygame.image.load(os.path.join(SPRITES_DIR, 'back.png'))

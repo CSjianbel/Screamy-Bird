@@ -3,12 +3,12 @@ import pygame
 from game.utils.button import Button
 
 class GameEnd:
-    def __init__(self, config, game_status, score, leaderboard, game_controller):
+    def __init__(self, config, game_status, score, leaderboard, game_manager):
         self.config = config
         self.game_status = game_status
         self.leaderboard = leaderboard
         self.score = score
-        self.controller = game_controller
+        self.game_manager = game_manager
         self.result_bg = config.sprites.result
         self.game_over_label = config.sprites.game_over
         self.restart_btn = Button(100, 500, config.sprites.restart_btn)
@@ -33,12 +33,13 @@ class GameEnd:
         screen.blit(show_score, (390, 340))
 
         if self.restart_btn.is_clicked():
-            self.controller.restart_game()
+            self.game_manager.restart_game()
 
         if self.home_btn.is_clicked():
             # for now the home button will just restart the game
             # but in the future this should go back to the main menu to choose other game modes
-            self.controller.restart_game()
+            self.game_manager.restart_game()
 
         if self.show_board_btn.is_clicked():
-            pass
+            self.game_manager.show_leaderboard = True
+            self.game_manager.show_result = False
