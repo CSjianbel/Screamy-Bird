@@ -23,7 +23,6 @@ class GameController:
     def update(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.game_manager.is_game_over = True
                 self.game_status.set_game_over()
                 self.stop_voice_recognition()
                 self.stream.stop_stream()
@@ -35,7 +34,7 @@ class GameController:
                 self.jump_button_control(event)
 
             if self.game_status.is_game_over:
-                self.restart_game(event)
+                self.stop_voice_recognition()
 
     def jump_button_control(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN and not self.mouse_button_pressed:
@@ -69,13 +68,3 @@ class GameController:
             
             if self.terminate_voice_process:
                 break
-
-    def restart_game(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                self.game_status.set_game_idle()
-                self.game_manager.pipe_group.empty()
-                self.game_manager.bird.reset()
-                self.game_manager.score.reset()
-                self.stop_voice_recognition()
-                self.start_voice_recognition()
