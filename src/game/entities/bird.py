@@ -78,8 +78,6 @@ class Bird(pygame.sprite.Sprite):
         return self.rect.y
     
     # cinacall ito sa nose_detection.py
-    def setPos(self, pos):
-        if pos != None:
-            self.rect.x = pos[0]
-            self.rect.y = pos[1]
+    def setYPos(self, y_pos):
+        self.rect.y = y_pos
         print(self.rect)

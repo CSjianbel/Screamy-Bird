@@ -68,8 +68,9 @@ class NoseDetection:
     def set_nose_pos(self, pos):
         self.nose_pos = pos
 
-        # kada pag change ng nose_pos, update din yung position ng bird
-        self.bird.setPos(self.nose_pos)
+        # kada pag change ng nose_pos, update din yung y position ng bird
+        if self.nose_pos != None:
+            self.bird.setYPos(self.nose_pos[1])
 
 
         
