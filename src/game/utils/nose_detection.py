@@ -1,17 +1,34 @@
+import os
+
 import pygame
 import cv2 
 import numpy as np
+import threading 
+
+CASCADE_DIR = os.path.join('..', 'cascade_files')
+CASCADE_FILE = os.path.join(CASCADE_DIR, 'haarcascade_mcs_nose.xml')
 
 class NoseDetection:
 
     def __init__(self, window):
-        self._nose_cascade = cv2.CascadeClassifier('./cascade_files/haarcascade_mcs_nose.xml')
+        self._nose_cascade = cv2.CascadeClassifier(CASCADE_FILE)
         self.cam = cv2.VideoCapture(0)
         self.window = window
         self.frame_surface = None
+        self.stop_detecting_nose = True
+        self.process = None
 
     def start_nose_detection(self):
-        while True:
+        self.stop_detecting_nose = False
+        self.process = threading.Thread(target=self.detect_nose)
+        self.process.start()
+
+    def stop_nose_detection(self):
+        if self.process and self.process.is_alive():
+            self.stop_detecting_nose = True
+
+    def detect_nose(self):
+        while self.detect_nose:
             _, frame = self.cam.read()
             self.set_frame_surface(frame)
 
