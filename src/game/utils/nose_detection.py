@@ -10,13 +10,14 @@ CASCADE_FILE = os.path.join(CASCADE_DIR, 'haarcascade_mcs_nose.xml')
 
 class NoseDetection:
 
-    def __init__(self, window):
-        self._nose_cascade = cv2.CascadeClassifier(CASCADE_FILE)
+    def __init__(self, window, game_manager):
+        self._nose_cascade = cv2.CascadeClassifier('./cascade_files/haarcascade_mcs_nose.xml')
         self.cam = cv2.VideoCapture(0)
         self.window = window
         self.frame_surface = None
         self.stop_detecting_nose = True
         self.process = None
+        self.bird = game_manager.bird
 
     def start_nose_detection(self):
         self.stop_detecting_nose = False
@@ -28,9 +29,9 @@ class NoseDetection:
             self.stop_detecting_nose = True
 
     def detect_nose(self):
-        while self.detect_nose:
+        while True:
             _, frame = self.cam.read()
-            self.set_frame_surface(frame)
+            #self.set_frame_surface(frame)
 
             # Convert frame to grayscale image
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -46,6 +47,9 @@ class NoseDetection:
             # If no nose was detected then set it to None
             if len(nose_rects) == 0:
                 self.set_nose_pos(None)
+            
+            # print(self.nose_pos)
+            
 
     def get_frame_surface(self):
         return self.frame_surface
@@ -63,6 +67,9 @@ class NoseDetection:
 
     def set_nose_pos(self, pos):
         self.nose_pos = pos
+
+        # kada pag change ng nose_pos, update din yung position ng bird
+        self.bird.setPos(self.nose_pos)
 
 
         

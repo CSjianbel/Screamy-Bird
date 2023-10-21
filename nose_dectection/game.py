@@ -29,14 +29,14 @@ while running:
 
     
     # Convert the OpenCV frame to a Pygame surface
-    frame_surface = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    frame_surface = np.rot90(frame_surface)
-    frame_surface = pygame.surfarray.make_surface(frame_surface).convert()
+    #frame_surface = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    #frame_surface = np.rot90(frame_surface)
+    #frame_surface = pygame.surfarray.make_surface(frame_surface).convert()
 
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     # Blit the webcam feed onto the Pygame window
-    screen.blit(frame_surface, (0, 0))
+    #screen.blit(frame_surface, (0, 0))
 
     # find noses in frame
     nose_rects = nose_cascade.detectMultiScale(gray, 1.3, 5)

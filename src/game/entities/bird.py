@@ -2,9 +2,10 @@ import pygame
 
 
 class Bird(pygame.sprite.Sprite):
-    def __init__(self, sprite, init_x, init_y, game_status):
+    def __init__(self, sprite, init_x, init_y, game_status, game_manager):
         pygame.sprite.Sprite.__init__(self)
         self.game_status = game_status
+        self.game_manager = game_manager
         self.images = sprite
         self.image = self.images[0]
         self.rect = self.image.get_rect()
@@ -16,11 +17,18 @@ class Bird(pygame.sprite.Sprite):
         self.velocity = 0
 
     def update(self):
-        if self.game_status.is_game_started or self.game_status.is_game_over:
-            self.apply_gravity()
-
         if not self.game_status.is_game_over:
             self.animate_bird()
+
+        if (self.game_manager.game_mode == "voice" or self.game_manager.game_mode == "tap"):
+            if self.game_status.is_game_started or self.game_status.is_game_over:
+                self.apply_gravity()
+        
+        if (self.game_manager.game_mode == "cam"):
+            #bird_pos = self.game_manager.nose_detection.get_nose_pos()
+            #self.rect.x = bird_pos[0]
+            #self.rect.y = bird_pos[1]
+            pass
 
         self.rotate()
         self.check_bounds()
@@ -68,3 +76,10 @@ class Bird(pygame.sprite.Sprite):
 
     def getPosY(self):
         return self.rect.y
+    
+    # cinacall ito sa nose_detection.py
+    def setPos(self, pos):
+        if pos != None:
+            self.rect.x = pos[0]
+            self.rect.y = pos[1]
+        print(self.rect)

@@ -11,6 +11,7 @@ from game.entities.end_game import GameEnd
 
 from game.controller import GameController
 from game.utils.particle import RainbowParticles
+from game.utils.nose_detection import NoseDetection
 
 
 class GameManager:
@@ -24,7 +25,8 @@ class GameManager:
         self.bird_group = pygame.sprite.Group()
         self.pipe_group = pygame.sprite.Group()
         self.ground_group = pygame.sprite.Group()
-        self.bird = Bird(self.sprites.bird, 100, int(self.config.window.height / 2), self.game_status)
+        self.game_mode = "cam"
+        self.bird = Bird(self.sprites.bird, 100, int(self.config.window.height / 2), self.game_status, self)
         self.ground = Ground(self.sprites.ground, 300, 768, self.game_status)
         self.background = Background(self.sprites.background)
         self.score = Score(self.bird_group, self.pipe_group)
@@ -33,14 +35,15 @@ class GameManager:
         self.bird_group.add(self.bird)
         self.rainbow_particles = RainbowParticles()
         self.game_controller = GameController(self, self.game_status)
-
         self.show_leaderboard = False
         self.show_result = True
         self.leaderboard = LeaderBoard(self.config, self.game_status, self.score, self)
         self.game_end = GameEnd(self.config, self.game_status, self.score, self.leaderboard, self)
 
-        
+        # intialize nose detection
+        self.nose_detection = NoseDetection(self.config.window, self)
 
+        
     def update(self):
         self.background.draw(self.screen)
 

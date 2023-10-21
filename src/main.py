@@ -26,8 +26,9 @@ class FlappyBird:
         game_config = GameConfig(self.screen, self.window, self.sprites, self.fps, self.clock)
         game_manager = GameManager(game_config, game_status)
         
-        # create a child process for voice recognition
-        game_manager.game_controller.start_voice_recognition()
+        # create a child process for nose detection
+        # hinali ko muna si voice detection
+        game_manager.nose_detection.start_nose_detection()
 
         while not game_manager.game_controller.exit:
             self.clock.tick(self.fps)
