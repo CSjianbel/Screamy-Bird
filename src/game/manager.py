@@ -22,7 +22,9 @@ class GameManager:
         self.last_pipe = pygame.time.get_ticks() - self.pipe_frequency
         self.game_status = game_status
         self.bird_group = pygame.sprite.Group()
+        # modify
         self.pipe_group = pygame.sprite.Group()
+
         self.ground_group = pygame.sprite.Group()
         self.bird = Bird(self.sprites.bird, 100, int(self.config.window.height / 2), self.game_status)
         self.ground = Ground(self.sprites.ground, 300, 768, self.game_status)
@@ -38,7 +40,6 @@ class GameManager:
         self.show_result = True
         self.leaderboard = LeaderBoard(self.config, self.game_status, self.score, self)
         self.game_end = GameEnd(self.config, self.game_status, self.score, self.leaderboard, self)
-
         
 
     def update(self):
@@ -47,9 +48,15 @@ class GameManager:
         self.rainbow_particles.draw(self.screen, self.bird.getPosY())
 
         self.pipe_group.draw(self.screen)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_p]:
+            if len(self.pipe_group) != 0:
+                self.pipe_group.sprites()[-1].stop_moving()
+                self.pipe_group.sprites()[-2].stop_moving()
 
         self.bird_group.draw(self.screen)
         self.bird_group.update()
+
 
         if self.game_status.is_game_idle:
             self.screen.blit(self.sprites.get_ready, (159, 150))
@@ -76,12 +83,16 @@ class GameManager:
         time_now = pygame.time.get_ticks()
         if time_now - self.last_pipe > self.pipe_frequency:
             pipe_height = random.randint(-100, 100)
-            btm_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) + pipe_height, -1)
-            top_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) + pipe_height, 1)
+            y_speed = random.randint(1, 15)
+            direction = 1 if random.random() < 0.5 else -1
+            btm_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) + pipe_height, -1, y_speed, direction)
+            top_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) + pipe_height, 1, y_speed, direction)
             self.pipe_group.add(btm_pipe)
             self.pipe_group.add(top_pipe)
             self.last_pipe = time_now
         self.pipe_group.update()
+        for pipe in self.pipe_group:
+            pipe.move()
 
     def check_collisions(self):
         if  pygame.sprite.groupcollide(self.bird_group, self.pipe_group, False, False) or \

@@ -60,7 +60,7 @@ class GameController:
             audio_data = np.frombuffer(self.stream.read(1024), dtype=np.float32)
             loudness = np.abs(audio_data).mean()
 
-            print(f'Loudness: {loudness}')
+            # print(f'Loudness: {loudness}')
 
             if not self.game_status.is_game_over:
                 if loudness > self.scream_threshold:
