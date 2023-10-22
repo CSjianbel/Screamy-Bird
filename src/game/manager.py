@@ -18,8 +18,9 @@ class GameManager:
         self.config = config
         self.screen = self.config.screen
         self.sprites = self.config.sprites
-        self.pipe_frequency = 1500
+        self.pipe_frequency = 2200
         self.last_pipe = pygame.time.get_ticks() - self.pipe_frequency
+        self.pipes = []
         self.game_status = game_status
         self.bird_group = pygame.sprite.Group()
         self.pipe_group = pygame.sprite.Group()
@@ -32,14 +33,13 @@ class GameManager:
         self.ground_group.add(self.ground)
         self.bird_group.add(self.bird)
         self.rainbow_particles = RainbowParticles()
-        self.game_controller = GameController(self, self.game_status)
+        self.game_controller = GameController(self)
 
         self.show_leaderboard = False
         self.show_result = True
         self.leaderboard = LeaderBoard(self.config, self.game_status, self.score, self)
         self.game_end = GameEnd(self.config, self.game_status, self.score, self.leaderboard, self)
 
-        
 
     def update(self):
         self.background.draw(self.screen)
@@ -71,13 +71,18 @@ class GameManager:
                 self.leaderboard.draw(self.screen)
                 self.leaderboard.update()
 
+        self.pipes = self.pipe_group.sprites()
+
+        # if len(pipes) > 1:
+        #     pipes[0].closePipe()
+        #     pipes[1].closePipe()
 
     def generate_pipes(self):
         time_now = pygame.time.get_ticks()
         if time_now - self.last_pipe > self.pipe_frequency:
             pipe_height = random.randint(-100, 100)
-            btm_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) + pipe_height, -1)
-            top_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) + pipe_height, 1)
+            btm_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) - 50, -1, self.bird)
+            top_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) - 50, 1, self.bird)
             self.pipe_group.add(btm_pipe)
             self.pipe_group.add(top_pipe)
             self.last_pipe = time_now
@@ -94,5 +99,5 @@ class GameManager:
         self.pipe_group.empty()
         self.bird.reset()
         self.score.reset()
-        self.game_controller.start_voice_recognition()
+        #self.game_controller.start_voice_recognition()
        
