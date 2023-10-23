@@ -13,7 +13,7 @@ class Sprites:
         ])
         self.background = pygame.image.load(os.path.join(SPRITES_DIR, 'background.png'))
         self.pipe = pygame.image.load(os.path.join(SPRITES_DIR, 'pipe.png'))
-        self.ground = pygame.image.load(os.path.join(SPRITES_DIR, 'ground.png'))
+        self.ground = pygame.image.load(os.path.join(SPRITES_DIR, 'ground1.png'))
         self.save_button = pygame.image.load(os.path.join(SPRITES_DIR, 'restart.png'))
         self.leaderboard = pygame.image.load(os.path.join(SPRITES_DIR, 'leaderboard.png'))
         self.leaderboard_table = pygame.image.load(os.path.join(SPRITES_DIR, 'leaderboard_table.png'))

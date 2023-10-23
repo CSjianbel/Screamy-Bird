@@ -46,3 +46,4 @@ class Pipe(pygame.sprite.Sprite):
                 self.change_direction()
             if self.rect.topleft[1] >= 700:
                 self.change_direction()
+
