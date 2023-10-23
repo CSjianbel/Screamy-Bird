@@ -22,7 +22,6 @@ class GameManager:
         self.last_pipe = pygame.time.get_ticks() - self.pipe_frequency
         self.game_status = game_status
         self.bird_group = pygame.sprite.Group()
-        # modify
         self.pipe_group = pygame.sprite.Group()
 
         self.ground_group = pygame.sprite.Group()
@@ -41,7 +40,7 @@ class GameManager:
         self.leaderboard = LeaderBoard(self.config, self.game_status, self.score, self)
         self.game_end = GameEnd(self.config, self.game_status, self.score, self.leaderboard, self)
         # classic, coop, xcoop
-        self.game_mode = 'classic'
+        self.game_mode = 'coop'
         # keyboard, voice, nose
         self.control_mode = 'keyboard'
 
@@ -54,7 +53,7 @@ class GameManager:
         keys = pygame.key.get_pressed()
         # 1,2,3 - classic, coop, xcoop
         # 8,9,0 - keyboard, voice, nose
-        if self.game_status.is_game_idle:
+        if self.game_status.is_game_idle or self.game_status.is_game_over:
             if keys[pygame.K_1]:
                 self.game_mode = 'classic'
             elif keys[pygame.K_2]:
@@ -97,7 +96,7 @@ class GameManager:
             self.move_pipes()
             if keys[pygame.K_p]:
                 if len(self.pipe_group) != 0:
-                    self.pipe_group.sprites()[-1].stop_moving()
+                    self.pipe_group.sprites()[-1 ].stop_moving()
                     self.pipe_group.sprites()[-2].stop_moving()
 
 
