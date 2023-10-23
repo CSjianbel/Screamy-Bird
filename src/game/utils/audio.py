@@ -41,7 +41,7 @@ class Audio:
             loudness = np.abs(audio_data).mean()
 
             # print(f'Loudness {loudness}..')
-
+    
             if not self.game_status.is_game_over:
                 if loudness > self.scream_threshold:
                     self.bird.jump()

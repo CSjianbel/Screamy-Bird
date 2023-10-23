@@ -23,7 +23,7 @@ class GameManager:
         self.game_status = game_status
         self.bird_group = pygame.sprite.Group()
         self.pipe_group = pygame.sprite.Group()
-
+        self.pipes = []
         self.ground_group = pygame.sprite.Group()
         self.bird = Bird(self.sprites.bird, 100, int(self.config.window.height / 2), self.game_status)
         self.ground = Ground(self.sprites.ground, 300, 768, self.game_status)
@@ -33,14 +33,14 @@ class GameManager:
         self.ground_group.add(self.ground)
         self.bird_group.add(self.bird)
         self.rainbow_particles = RainbowParticles()
+        # classic, coop, xcoop
+        self.game_mode = 'coop'
         self.game_controller = GameController(self, self.game_status)
 
         self.show_leaderboard = False
         self.show_result = True
         self.leaderboard = LeaderBoard(self.config, self.game_status, self.score, self)
         self.game_end = GameEnd(self.config, self.game_status, self.score, self.leaderboard, self)
-        # classic, coop, xcoop
-        self.game_mode = 'coop'
         # keyboard, voice, nose
         self.control_mode = 'keyboard'
 
@@ -83,6 +83,8 @@ class GameManager:
         self.ground_group.draw(self.screen)
         self.ground_group.update()
 
+        self.pipes = self.pipe_group.sprites()
+
         if self.game_status.is_game_over:
             if self.show_result:
                 self.game_end.draw(self.screen)
@@ -106,8 +108,12 @@ class GameManager:
             pipe_height = random.randint(-100, 100)
             y_speed = random.randint(1, 15)
             direction = 1 if random.random() < 0.5 else -1
-            btm_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) + pipe_height, -1, y_speed, direction)
-            top_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) + pipe_height, 1, y_speed, direction)
+            if self.game_mode == 'xcoop':
+                btm_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) - 50, -1, y_speed, direction, self.game_mode, self.bird)
+                top_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) - 50, 1, y_speed, direction, self.game_mode, self.bird)
+            else:
+                btm_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) + pipe_height, -1, y_speed, direction, self.game_mode, self.bird)
+                top_pipe = Pipe(self.sprites.pipe, self.config.window.width, int(self.config.window.height / 2) + pipe_height, 1, y_speed, direction, self.game_mode, self.bird)
             self.pipe_group.add(btm_pipe)
             self.pipe_group.add(top_pipe)
             self.last_pipe = time_now
