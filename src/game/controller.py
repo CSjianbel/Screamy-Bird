@@ -1,7 +1,6 @@
 import pygame
-import pyaudio
-import numpy as np
-import threading
+
+from .utils.audio import Audio
 
 class GameController:
     def __init__(self, game_manager, game_status):
@@ -9,26 +8,15 @@ class GameController:
         self.game_status = game_status
         self.bird = self.game_manager.bird
         self.mouse_button_pressed = False
-        self.py_audio = pyaudio.PyAudio()
-        self.scream_threshold = 0.2
-        self.voice_process = None
-        self.terminate_voice_process = False
         self.exit = False
-        self.stream = self.py_audio.open(format = pyaudio.paFloat32,
-                                         channels = 1,
-                                         rate = 44100,
-                                         input = True,
-                                         frames_per_buffer = 1024)
+        self.audio_recog = Audio(self.bird, game_status)
         
     def update(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.game_status.set_game_over()
-                self.stop_voice_recognition()
-                self.stream.stop_stream()
-                self.stream.close()
-                self.py_audio.terminate()
                 self.exit = True
+                self.audio_recog.exit()
 
             if not self.game_status.is_game_over:
                 self.jump_button_control(event)
@@ -47,24 +35,9 @@ class GameController:
                 self.mouse_button_pressed = False
 
     def start_voice_recognition(self):
-        self.voice_process = threading.Thread(target = self.jump_voice_control)
-        self.voice_process.start()
+        self.audio_recog.start_voice_recognition()
 
     def stop_voice_recognition(self):
-        if self.voice_process and self.voice_process.is_alive():
-            self.terminate_voice_process = True
-        
-    def jump_voice_control(self):
-        while not self.game_status.is_game_over:
-            # Capture audio for voice control
-            audio_data = np.frombuffer(self.stream.read(1024), dtype=np.float32)
-            loudness = np.abs(audio_data).mean()
+        self.audio_recog.stop_voice_recognition()
 
-            # print(f'Loudness: {loudness}')
-
-            if not self.game_status.is_game_over:
-                if loudness > self.scream_threshold:
-                    self.bird.jump()
-            
-            if self.terminate_voice_process:
-                break
+    

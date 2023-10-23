@@ -40,23 +40,37 @@ class GameManager:
         self.show_result = True
         self.leaderboard = LeaderBoard(self.config, self.game_status, self.score, self)
         self.game_end = GameEnd(self.config, self.game_status, self.score, self.leaderboard, self)
-        
+        # classic, coop, xcoop
+        self.game_mode = 'classic'
+        # keyboard, voice, nose
+        self.control_mode = 'keyboard'
 
     def update(self):
         self.background.draw(self.screen)
-
         self.rainbow_particles.draw(self.screen, self.bird.getPosY())
-
         self.pipe_group.draw(self.screen)
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_p]:
-            if len(self.pipe_group) != 0:
-                self.pipe_group.sprites()[-1].stop_moving()
-                self.pipe_group.sprites()[-2].stop_moving()
 
+        # Get keys pressed
+        keys = pygame.key.get_pressed()
+        # 1,2,3 - classic, coop, xcoop
+        # 8,9,0 - keyboard, voice, nose
+        if self.game_status.is_game_idle:
+            if keys[pygame.K_1]:
+                self.game_mode = 'classic'
+            elif keys[pygame.K_2]:
+                self.game_mode = 'coop'
+            elif keys[pygame.K_3]:
+                self.game_mode = 'xcoop'
+            elif keys[pygame.K_8]:
+                self.control_mode = 'keyboard'
+            elif keys[pygame.K_9]:
+                self.control_mode = 'voice'
+            elif keys[pygame.K_0]:
+                self.control_mode = 'nose'
+
+        # Standard
         self.bird_group.draw(self.screen)
         self.bird_group.update()
-
 
         if self.game_status.is_game_idle:
             self.screen.blit(self.sprites.get_ready, (159, 150))
@@ -77,6 +91,14 @@ class GameManager:
             if self.show_leaderboard:
                 self.leaderboard.draw(self.screen)
                 self.leaderboard.update()
+        # endstandard
+
+        if self.game_mode == 'coop':
+            self.move_pipes()
+            if keys[pygame.K_p]:
+                if len(self.pipe_group) != 0:
+                    self.pipe_group.sprites()[-1].stop_moving()
+                    self.pipe_group.sprites()[-2].stop_moving()
 
 
     def generate_pipes(self):
@@ -91,6 +113,8 @@ class GameManager:
             self.pipe_group.add(top_pipe)
             self.last_pipe = time_now
         self.pipe_group.update()
+
+    def move_pipes(self):
         for pipe in self.pipe_group:
             pipe.move()
 
